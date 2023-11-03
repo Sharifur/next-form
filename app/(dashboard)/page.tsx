@@ -17,7 +17,9 @@ const Home = () => {
                 <Separator className="my-6" />
                 <h2 className="text-4xl font-bold col-span-2">Your Forms</h2>
                 <Separator className="my-6" />
-                <CreateFormButton />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <CreateFormButton />
+                </div>
             </Suspense>
         </div>
     );
@@ -107,7 +109,7 @@ function StatsCard({
                 }
                 {!loading && value}
             </div>
-            <p className="tex-xs text-muted-foreground pt-1">{helperText}</p>
+            <p className="text-xs text-muted-foreground pt-1">{helperText}</p>
         </CardContent>
         </Card>
     )
