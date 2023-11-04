@@ -34,10 +34,11 @@ import { Span } from "next/dist/trace";
 import { toast } from "./ui/use-toast";
 import { formSchema, formSchemaType } from "@/schema/form";
 import { CreateForm } from "@/actions/form";
+import { useRouter } from "next/navigation";
 
 
 export const CreateFormButton = () => {
-
+    const router = useRouter();
     const form = useForm<formSchemaType>({
         resolver: zodResolver(formSchema)
     });
@@ -50,7 +51,7 @@ export const CreateFormButton = () => {
                 description : "Form created successfully"
             });
 
-            console.log(formId);
+            router.push(`/builder/${formId}`)
        }catch(error){
         toast({
             title: "Error",

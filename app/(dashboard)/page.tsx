@@ -1,14 +1,20 @@
-import { GetFormStats } from "@/actions/form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GetFormStats, GetForms } from "@/actions/form";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton } from "@clerk/nextjs";
 import { ReactNode, Suspense } from "react";
 import {LuView} from "react-icons/lu";
-import {FaWpforms} from "react-icons/fa";
+import {FaEdit, FaWpforms} from "react-icons/fa";
+import {BiRightArrowAlt} from "react-icons/bi";
 import {HiCursorClick} from "react-icons/hi";
 import {TbArrowBounce} from "react-icons/tb";
 import { Separator } from "@/components/ui/separator";
 import { CreateFormButton } from "@/components/CreateFormButton";
+import { Form } from "@prisma/client";
+import { Badge } from "@/components/ui/badge";
+import { formatDistance } from "date-fns";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 const Home = () => {
     return ( 
         <div className="container pt-4">
@@ -19,6 +25,11 @@ const Home = () => {
                 <Separator className="my-6" />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <CreateFormButton />
+                    <Suspense fallback={[1,2,3].map((el) =>(
+                        <FormCardSkeleton key={el} />
+                    ))}>
+                        <FormCards />
+                    </Suspense>
                 </div>
             </Suspense>
         </div>
@@ -111,6 +122,76 @@ function StatsCard({
             </div>
             <p className="text-xs text-muted-foreground pt-1">{helperText}</p>
         </CardContent>
+        </Card>
+    )
+}
+
+function FormCardSkeleton() {
+    return <Skeleton className="border-2 border-primary/20 h-[190px] w-full" />
+}
+
+async function FormCards (){
+    const forms = await GetForms();
+
+    return (
+        <>
+            {forms.map((form) => (
+                <FormCard key={form.id} form={form} />
+            ))}
+        </>
+    )
+}
+
+function FormCard({form} : {form: Form}){
+    return (
+       <Card>
+        <CardHeader>
+            <CardTitle  className="flex items-center gap-2 justify-between">
+                <span className="truncate font-bold">
+                    {form.name}
+                </span>
+                {
+                form.published ? (
+                        <Badge>Published</Badge>
+                    ) :
+                    (
+                        <Badge variant={"destructive"}>Draft</Badge>
+                    )
+                }
+            </CardTitle>
+            </CardHeader>
+            <CardDescription className="flex items-center justify-between text-muted-foreground text-sm px-6 pb-2">
+                <span>{formatDistance(form.createdAt,new Date(),{
+                    addSuffix : true
+                })}</span>
+                {form.published && (
+                    <span className="flex items-center gap-2">
+                        <LuView className="text-muted-foreground" />
+                        <span>{form.visit.toLocaleString()}</span>
+                        <FaWpforms className="text-muted-foreground" />
+                        <span>{form.submissions.toLocaleString()}</span>
+                    </span>
+                )}
+            </CardDescription>
+            <CardContent className="h-[20px] truncate text-sm text-muted-foreground">
+                {form.description || 'no description'}
+            </CardContent>
+            <CardFooter>
+                {form.published && (
+                    <Button asChild className="w-full mt-2 text-md gap-4">
+                        <Link href={`/forms/${form.id}`}>
+                            View Submissions <BiRightArrowAlt/>
+                        </Link>
+                    </Button>
+                )}
+                 {!form.published && (
+                    <Button asChild className="w-full mt-2 text-md gap-4">
+                        <Link href={`/builder/${form.id}`}>
+                            Edit Form  <FaEdit/>
+                        </Link>
+                    </Button>
+                )}
+            </CardFooter>
         </Card>
     )
 }
