@@ -12,7 +12,7 @@ import { BiSolidTrash } from "react-icons/bi";
 
 const Designer = () => {
 
-    const {elements, addElement} = useDesigner()
+    const {elements, addElement,selectedElement,setSelectedElement} = useDesigner()
 
     const droppable = useDroppable({
         id: "designer-drag-area",
@@ -38,7 +38,13 @@ const Designer = () => {
     })
 
     return ( 
-        <div className="flex w-full h-full">
+        <div className="flex w-full h-full"
+        onClick={() => {
+            if(selectedElement){
+                setSelectedElement(null);
+            }
+        }}
+        >
             <div className="p-4 w-full">
                 <div
                 ref={droppable.setNodeRef}
@@ -74,7 +80,7 @@ const Designer = () => {
 
 function DesignerElementWrapper({element} : {element : FromElementInstance}) {
     const [mouseIsOver,setMouseIsOver] = useState(false);
-    const {removeElement} = useDesigner();
+    const {removeElement,selectedElement,setSelectedElement} = useDesigner();
     const DesignerElement = FormElements[element.type].designerComponent;
     const topHalf = useDroppable({
         id: element.id + '-top',
@@ -104,6 +110,8 @@ function DesignerElementWrapper({element} : {element : FromElementInstance}) {
 
     if(draggable.isDragging){ return null}
 
+    console.log('selected el',selectedElement)
+
     return (
        <div
        ref={draggable.setNodeRef}
@@ -115,6 +123,10 @@ function DesignerElementWrapper({element} : {element : FromElementInstance}) {
        }}
        onMouseLeave={() => {
         setMouseIsOver(false);
+       }}
+       onClick={(e) => {
+        e.stopPropagation();
+        setSelectedElement(element);
        }}
        >
         <div
@@ -129,7 +141,8 @@ function DesignerElementWrapper({element} : {element : FromElementInstance}) {
             <>
             <div className="absolute right-0 h-full">
                 <Button
-                onClick={() => {
+                onClick={(e) => {
+                    e.stopPropagation();
                     removeElement(element.id)
                 }}
                 className="flex justify-center h-full border rounded-md rounded-l-none bg-red-500" variant={"outline"}>

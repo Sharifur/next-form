@@ -1,12 +1,15 @@
 "use client"
 
-import React, { useContext ,createContext, useState} from "react";
+import React, { useContext ,createContext, useState,Dispatch} from "react";
 import { FromElementInstance } from "../FormElements";
 
 type DesignerContextType = {
     elements : FromElementInstance[];
     addElement : (index: number, element: FromElementInstance) => void;
     removeElement : (id: string) => void;
+
+    selectedElement : FromElementInstance | null;
+    setSelectedElement: Dispatch<React.SetStateAction<FromElementInstance | null>>
 }
 
 export const DesignerContext = createContext<DesignerContextType | null>(null);
@@ -17,7 +20,8 @@ export default function DesignerContextProvider({
     children : React.ReactNode
 }){
 
-    const [elements, setElements] = useState<FromElementInstance[]>([])
+    const [elements, setElements] = useState<FromElementInstance[]>([]);
+    const [selectedElement,setSelectedElement] = useState<FromElementInstance | null>(null);
 
     const addElement = (index : number , element: FromElementInstance) => {
         setElements((prev) => {
@@ -36,7 +40,9 @@ export default function DesignerContextProvider({
         <DesignerContext.Provider value={{
             elements,
             addElement,
-            removeElement
+            removeElement,
+            selectedElement,
+            setSelectedElement
         }}>
             {children}
         </DesignerContext.Provider>
