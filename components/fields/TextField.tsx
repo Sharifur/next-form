@@ -59,7 +59,7 @@ function DesignerComponent ({
                 placeholder={placeholder}
             />
             {helperText && (
-                <p className="text-muted-foreground text-[0.8rem]"></p>
+                <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>
             )}
         </div>
     )
