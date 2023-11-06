@@ -74,7 +74,7 @@ const Designer = () => {
 
 function DesignerElementWrapper({element} : {element : FromElementInstance}) {
     const [mouseIsOver,setMouseIsOver] = useState(false);
-    
+    const {removeElement} = useDesigner();
     const DesignerElement = FormElements[element.type].designerComponent;
     const topHalf = useDroppable({
         id: element.id + '-top',
@@ -92,6 +92,10 @@ function DesignerElementWrapper({element} : {element : FromElementInstance}) {
             isBottomHalfDesignerElement:true
         }
     });
+
+
+
+
     return (
        <div
        className="relative h-[120px] flex flex-col text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
@@ -109,10 +113,14 @@ function DesignerElementWrapper({element} : {element : FromElementInstance}) {
         <div
         ref={bottomHalf.setNodeRef}
         className="absolute bottom-0 w-full h-1/2 rounded-b-md">
-        {!mouseIsOver && (
+        </div>
+        {mouseIsOver && (
             <>
             <div className="absolute right-0 h-full">
                 <Button
+                onClick={() => {
+                    removeElement(element.id)
+                }}
                 className="flex justify-center h-full border rounded-md rounded-l-none bg-red-500" variant={"outline"}>
                     <BiSolidTrash  className="h-6 w-6" />
                 </Button>
@@ -122,8 +130,8 @@ function DesignerElementWrapper({element} : {element : FromElementInstance}) {
             </div>
             </>
         )}
-        </div>
-         <div className="flex w-full h-[120px] items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none">
+         <div className={cn("flex w-full h-[120px] items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none opacity-100",
+         mouseIsOver && "opacity-30")}>
             <DesignerElement elementInstance={element}/>
         </div>
        </div>
