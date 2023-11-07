@@ -38,14 +38,14 @@ const Designer = () => {
     })
 
     return ( 
-        <div className="flex w-full h-full"
-        onClick={() => {
-            if(selectedElement){
-                setSelectedElement(null);
-            }
-        }}
-        >
-            <div className="p-4 w-full">
+        <div className="flex w-full h-full">
+            <div className="p-4 w-full"
+            onClick={() => {
+                if(selectedElement){
+                    setSelectedElement(null);
+                }
+            }}
+            >
                 <div
                 ref={droppable.setNodeRef}
                 className={cn("bg-background max-w-[920px] h-full m-auto rounded-xl flex flex-col flex-grow items-center justify-start flex-1 overflow-y-auto",
@@ -110,7 +110,6 @@ function DesignerElementWrapper({element} : {element : FromElementInstance}) {
 
     if(draggable.isDragging){ return null}
 
-    console.log('selected el',selectedElement)
 
     return (
        <div

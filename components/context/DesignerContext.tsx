@@ -10,6 +10,7 @@ type DesignerContextType = {
 
     selectedElement : FromElementInstance | null;
     setSelectedElement: Dispatch<React.SetStateAction<FromElementInstance | null>>
+    updateElement : (id: string, element: FromElementInstance) => void;
 }
 
 export const DesignerContext = createContext<DesignerContextType | null>(null);
@@ -36,13 +37,23 @@ export default function DesignerContextProvider({
         setElements((prev) => prev.filter((element) => element.id !== id));
     }
 
+    const updateElement = (id: string, element : FromElementInstance) => {
+        setElements( (prev) => {
+            const newELements = [...prev];
+            const index = newELements.findIndex((el) => el.id === id);
+            newELements[index] = element;
+            return newELements;
+        })
+    }
+
     return (
         <DesignerContext.Provider value={{
             elements,
             addElement,
             removeElement,
             selectedElement,
-            setSelectedElement
+            setSelectedElement,
+            updateElement
         }}>
             {children}
         </DesignerContext.Provider>
