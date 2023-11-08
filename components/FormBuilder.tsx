@@ -38,7 +38,10 @@ const FormBuilder = ({form} : {form : Form}) => {
         setElements(elements);
     },[form,setElements])
 
-    const shareUrl = `${window.location.origin}/submit/${form.shareUrl}`;
+    let shareUrl = '';
+    if(window != undefined){
+        shareUrl = `${window.location.origin}/submit/${form.shareUrl}`;
+    }
 
     if(form.published){
         return (
