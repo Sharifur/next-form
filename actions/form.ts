@@ -94,3 +94,20 @@ export const GetFormById = async (id: number) => {
 
     return form;
 }
+
+export const UpdateFormContent = async (id: number, jsonContent: string) => {
+    const user = await currentUser();
+    if(!user){
+        throw new UserNotFoundErr()
+    }
+
+    return await prisma.form.update({
+        where: {
+          userId: user.id,
+          id,
+        },
+        data: {
+          content: jsonContent,
+        },
+      });
+}
