@@ -49,9 +49,7 @@ export const TextFieldFormElement : FormElement = {
         label : "Text Field"
     },
     designerComponent: DesignerComponent,
-    formComponent: () => (
-        <div>form component</div>
-    ),
+    formComponent: FormComponent,
     propertiesComponent: PropertiesComponent
 }
 
@@ -215,6 +213,30 @@ function DesignerComponent ({
             <Input
                 readOnly
                 disabled
+                placeholder={placeholder}
+            />
+            {helperText && (
+                <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>
+            )}
+        </div>
+    )
+}
+function FormComponent ({
+    elementInstance
+} :{elementInstance : FromElementInstance}){
+    const element = elementInstance as CustomInstance;
+
+    const {label,require,placeholder,helperText} = element.extraAttributes;
+
+    return (
+        <div className="flex flex-col gap-2 w-full">
+            <Label>
+                {label}
+                {require &&(
+                    <span className="ml-2 text-destructive">*</span>
+                )}
+            </Label>
+            <Input
                 placeholder={placeholder}
             />
             {helperText && (
