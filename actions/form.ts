@@ -147,6 +147,7 @@ export async function SubmitForm(shareUrl: string, content: string) {
   return await prisma.form.update({
     where: {
       shareUrl: shareUrl,
+      published: true
     },
     data: {
       submissions: {
