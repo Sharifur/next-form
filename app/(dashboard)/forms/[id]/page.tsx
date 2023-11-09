@@ -57,7 +57,7 @@ const FormDetailsPage = async({params} : BuilderProps) => {
                 title="Total submissions"
                 icon={<FaWpforms className="text-yellow-600" />}
                 helperText="All time form submissions"
-                value={visit.toLocaleString() || ""}
+                value={submissions.toLocaleString() || ""}
                 loading={false}
                 className="shadow-md shadow-yellow-600"
             />
@@ -65,7 +65,7 @@ const FormDetailsPage = async({params} : BuilderProps) => {
                 title="Submission rate"
                 icon={<HiCursorClick className="text-green-600" />}
                 helperText="visits that result in a form submission"
-                value={visit.toLocaleString() +"%" || ""}
+                value={submissionRate.toLocaleString() +"%" || ""}
                 loading={false}
                 className="shadow-md shadow-green-600"
             />
@@ -73,7 +73,7 @@ const FormDetailsPage = async({params} : BuilderProps) => {
                 title="Bounce rate"
                 icon={<TbArrowBounce className="text-red-600" />}
                 helperText="visits leaves without interacting"
-                value={visit.toLocaleString()+"%" || ""}
+                value={bounceRate.toLocaleString()+"%" || ""}
                 loading={false}
                 className="shadow-md shadow-red-600"
             />
