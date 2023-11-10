@@ -8,7 +8,7 @@ import Designer from "./Designer";
 import { DndContext, MouseSensor, useSensors,useSensor, TouchSensor } from "@dnd-kit/core";
 import DragOverlayWrapper from "./DragOverlayWrapper";
 import useDesigner from "./hooks/useDesigner";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { toast } from "./ui/use-toast";
@@ -18,6 +18,12 @@ import Confetti from "react-confetti";
 
 const FormBuilder = ({form} : {form : Form}) => {
     const {setElements} = useDesigner();
+    const [mounted,setMounted] = useState(false);
+
+    if(!mounted){
+        setMounted(true);
+    }
+
     const mouseSensor = useSensor(MouseSensor,{
         activationConstraint: {
             distance : 10 //10px

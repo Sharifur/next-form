@@ -13,9 +13,12 @@ const FormElementsSidebar = () => {
             <SidebarButtonElement formElement={FormElements.SubTitleField} />
             <SidebarButtonElement formElement={FormElements.ParagraphField} />
             <SidebarButtonElement formElement={FormElements.SeparatorField} />
-            <SidebarButtonElement formElement={FormElements.SpacerFIeld} />
+            <SidebarButtonElement formElement={FormElements.SpacerField} />
             <p className=" text-ms text-muted-foreground col-span-1 md:col-span-2 my-2 place-self-start">Form Elements</p>
             <SidebarButtonElement formElement={FormElements.TextField} />
+            <SidebarButtonElement formElement={FormElements.NumberField} />
+            <SidebarButtonElement formElement={FormElements.TextAreaField} />
+            <SidebarButtonElement formElement={FormElements.DateField} />
             </div>
         </div>
      );

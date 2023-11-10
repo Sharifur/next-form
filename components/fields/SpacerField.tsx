@@ -23,13 +23,13 @@ import { cn } from "@/lib/utils";
 import { LuHeading1, LuSeparatorHorizontal } from "react-icons/lu";
 import { Slider } from "../ui/slider";
 
-const type: ElementsType = "SpacerFIeld";
+const type: ElementsType = "SpacerField";
 
 const extraAttributes =  {
     height: 20 //'px
 }
 const propertiesSchema = z.object({
-    height: z.number().min(5).max(100)
+    height: z.number().min(5).max(200)
 })
 
 
