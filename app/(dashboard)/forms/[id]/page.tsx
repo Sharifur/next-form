@@ -1,5 +1,5 @@
 
-import { GetFormById } from "@/actions/form";
+import { GetFormById, GetFormWithSumissions } from "@/actions/form";
 import FormBuilder from "@/components/FormBuilder";
 import FormLinkShare from "@/components/FormLinkShare";
 import VisitBtn from "@/components/VisitBtn";
@@ -9,6 +9,7 @@ import {FaEdit, FaWpforms} from "react-icons/fa";
 import {BiRightArrowAlt} from "react-icons/bi";
 import {HiCursorClick} from "react-icons/hi";
 import {TbArrowBounce} from "react-icons/tb";
+import { ElementsType, FromElementInstance } from "@/components/FormElements";
 
 interface BuilderProps {
     params: {id: string}
@@ -86,7 +87,33 @@ const FormDetailsPage = async({params} : BuilderProps) => {
      );
 }
 
-function SubmissionsTable({id} : {id: number}){
+async function SubmissionsTable({id} : {id: number}){
+    const form = await GetFormWithSumissions(id);
+    if(!form){
+        throw new Error("form not found");
+    }
+
+    const formElements = JSON.parse(form.content) as FromElementInstance[]
+
+    const columns:{
+        id: string;
+        label: string;
+        require: boolean;
+        type: ElementsType
+    }[] = [];
+
+    formElements.forEach(element => {
+        switch(element.type){
+            case "TextField":
+                columns.push({
+                    id: element.id,
+                    label: element.extraAttributes?.label,
+                    require: element.extraAttributes?.require,
+                    type: element.type
+                })
+        }
+    });
+    
     return (
         <>
             <h1 className="text-2xl font-bold my-4">Submissions</h1>
