@@ -10,6 +10,9 @@ import {BiRightArrowAlt} from "react-icons/bi";
 import {HiCursorClick} from "react-icons/hi";
 import {TbArrowBounce} from "react-icons/tb";
 import { ElementsType, FromElementInstance } from "@/components/FormElements";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { formatDistance } from "date-fns";
+import { ReactNode } from "react";
 
 interface BuilderProps {
     params: {id: string}
@@ -87,6 +90,8 @@ const FormDetailsPage = async({params} : BuilderProps) => {
      );
 }
 
+type Row = {[key: string] : string} & {submitedAt: Date}
+
 async function SubmissionsTable({id} : {id: number}){
     const form = await GetFormWithSumissions(id);
     if(!form){
@@ -113,12 +118,63 @@ async function SubmissionsTable({id} : {id: number}){
                 })
         }
     });
-    
+    const rows: Row[] = [];
+    form.FormSubmissions.forEach((submission) => {
+        const content = JSON.parse(submission.content);
+        rows.push({
+            ...content,
+            submitedAt: submission.createdAt
+        })
+    })
     return (
         <>
             <h1 className="text-2xl font-bold my-4">Submissions</h1>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        {columns.map(column => (
+                            <TableHead className="uppercase" key={column.id}>
+                                {column.label}
+                            </TableHead>
+                        ))}
+                        <TableHead className="text-muted-foreground text-right uppercase">
+                            Submitted at
+                        </TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {rows.map((row,index) => (
+                        <TableRow key={index}>
+                           {
+                            columns.map((column) => (
+                                <RowCell
+                                    key={column.id}
+                                    type={column.type}
+                                    value={row[column.id]}
+                                />
+                            ))
+                           }
+                           <TableCell className="text-mutedforeground text-right">
+                            {formatDistance(row.submitedAt, new Date(),{
+                                addSuffix: true
+                            })}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
         </>
     )
 }
  
+
+function RowCell({type,value} : {type: ElementsType; value: string}){
+    let node: ReactNode = value;
+    return (
+        <TableCell>
+            {node}
+        </TableCell>
+    )
+}
+
 export default FormDetailsPage;
