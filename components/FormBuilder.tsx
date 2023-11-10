@@ -20,9 +20,11 @@ const FormBuilder = ({form} : {form : Form}) => {
     const {setElements} = useDesigner();
     const [mounted,setMounted] = useState(false);
 
-    if(!mounted){
-        setMounted(true);
-    }
+    useEffect(() => {
+        if(!mounted){
+            setMounted(true);
+        }
+    },[])
 
     const mouseSensor = useSensor(MouseSensor,{
         activationConstraint: {
