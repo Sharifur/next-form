@@ -14,7 +14,9 @@ export const metadata: Metadata = {
 }
 
 import { ThemeProvider } from "@/components/providers/theme-providers";
-
+import { Toaster } from '@/components/ui/toaster';
+import DesignerContextProvider from '@/components/context/DesignerContext';
+import NextTopLoader  from "nextjs-toploader";
 
 export default function RootLayout({
   children,
@@ -25,14 +27,18 @@ export default function RootLayout({
     <ClerkProvider>
    <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <NextTopLoader />
+        <DesignerContextProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster/>
+          </ThemeProvider>
+        </DesignerContextProvider>
         </body>
     </html>
     </ClerkProvider>
